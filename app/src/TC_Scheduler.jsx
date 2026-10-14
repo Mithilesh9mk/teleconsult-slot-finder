@@ -114,10 +114,13 @@ const istFmt = (d, o) => new Intl.DateTimeFormat("en-GB", Object.assign({ timeZo
 const istClock = d => istFmt(d, { hour: "2-digit", minute: "2-digit", hour12: true }).toUpperCase();
 const istDay = d => istFmt(d, { weekday: "short", day: "2-digit", month: "short" });
 const istKey = d => istFmt(d, { year: "numeric", month: "2-digit", day: "2-digit" });
-const trtFmt = (d, o) => new Intl.DateTimeFormat("en-GB", Object.assign({ timeZone: "Europe/Istanbul" }, o)).format(d);
-const trtClock = d => trtFmt(d, { hour: "2-digit", minute: "2-digit", hour12: true }).toUpperCase();
-const trtDay = d => trtFmt(d, { weekday: "short", day: "2-digit", month: "short" });
-const trtKey = d => trtFmt(d, { year: "numeric", month: "2-digit", day: "2-digit" });
+// Destination clinic zone, chosen in the banner selector. Module-level so every formatter below follows it.
+const clinic = { zone: "Europe/Istanbul" };
+const clinicLabel = () => ((DESTS.find(x => x[1] === clinic.zone) || ["Clinic"])[0]).replace(/\s*\(.*\)/, "");
+const clinicFmt = (d, o) => new Intl.DateTimeFormat("en-GB", Object.assign({ timeZone: clinic.zone }, o)).format(d);
+const clinicClock = d => clinicFmt(d, { hour: "2-digit", minute: "2-digit", hour12: true }).toUpperCase();
+const clinicDay = d => clinicFmt(d, { weekday: "short", day: "2-digit", month: "short" });
+const clinicKey = d => clinicFmt(d, { year: "numeric", month: "2-digit", day: "2-digit" });
 function ist24(d) { return { h: +istFmt(d, { hour: "2-digit", hour12: false }).replace(/\D/g, "") % 24, mi: +istFmt(d, { minute: "2-digit" }) }; }
 const to12 = (h, mi) => `${((h + 11) % 12) + 1}:${String(mi).padStart(2, "0")} ${h < 12 ? "AM" : "PM"}`;
 
@@ -157,18 +160,18 @@ function buildMessage(name, localDateLabel, localTime12, tzAbbrStr, inst) {
   const first = name.trim().split(/\s+/)[0];
   return (
 `Hey ${first}! 🎉 You're all set.
-Your consultation with one of our top surgeons is confirmed, this is where things get exciting.
+Your teleconsultation is confirmed. Here are the details.
 
-Tele-Consultation Confirmation – ${name}
+Teleconsultation Confirmation – ${name}
 📅 Date: ${localDateLabel}
 ⏰ Time: ${localTime12} (${tzAbbrStr})
 🔗 Meeting Link: ${"{LINK}"}
 
-Join a few minutes early and come with any questions, our surgeon will have your details and is ready for you. See you there!
+Please join a few minutes early and bring any questions. See you there!
 
 ———
 🕒 IST (internal — delete this line before sending to patient): ${istClock(inst)}, ${istDay(inst)}
-🇹🇷 Istanbul/TRT (for the doctor): ${trtClock(inst)}, ${trtDay(inst)}`
+🏥 ${clinicLabel()} clinic time (for the doctor): ${clinicClock(inst)}, ${clinicDay(inst)}`
   );
 }
 
@@ -260,6 +263,8 @@ export default function App() {
   const [fAgentCustom, setFAgentCustom] = useState(false);
   const [mAgentCustom, setMAgentCustom] = useState(false);
   const [view, setView] = useState("board");
+  const [clinicZ, setClinicZ] = useState("Europe/Istanbul");
+  clinic.zone = clinicZ;
   const [aDate, setADate] = useState("all");
   const [aOwner, setAOwner] = useState("all");
   const [aOutcome, setAOutcome] = useState("all");
@@ -527,7 +532,7 @@ export default function App() {
   const openCopy = () => appts.length ? setModal({ type: "copy", text: buildBoardText() }) : showToast("Board is empty");
   const openExport = () => appts.length ? setModal({ type: "export", text: JSON.stringify(appts, null, 2) }) : showToast("Board is empty");
   function buildExcelTsv() {
-    const headers = ["TRT", "TRT Date", "IST", "IST Date", "Patient Name", "Case ID", "Meeting Link", "Lead Owner", "Comments", "TC owner", "Status", "Rebooking", "Patient Time", "Patient Date", "Patient Timezone"];
+    const headers = ["Clinic Time", "Clinic Date", "IST", "IST Date", "Patient Name", "Reference ID", "Meeting Link", "Booked By", "Notes", "Owner", "Status", "Rebooking", "Patient Time", "Patient Date", "Patient Timezone"];
     const rows = [...appts].sort((a, b) => new Date(a.istInstant) - new Date(b.istInstant)).map(a => {
       const i = new Date(a.istInstant);
       const lp = localParts(a.istInstant, a.iana);
@@ -537,7 +542,7 @@ export default function App() {
       else if (a.outcome === "realigned" || a.outcome === "noshow") rb = "Pending rebooking";
       else if (a.rebookedFromId && a.rebookFromIst) rb = `Rebook of ${istClock(new Date(a.rebookFromIst))} ${istDay(new Date(a.rebookFromIst))} IST${a.rebookReason ? " (" + outcomeLabel(a.rebookReason) + ")" : ""}`;
       return [
-        trtClock(i), trtDay(i), istClock(i), istDay(i),
+        clinicClock(i), clinicDay(i), istClock(i), istDay(i),
         a.name || "", "", a.link || "", a.agent || "", "", a.closer || "",
         outcomeLabel(a.outcome) || "", rb,
         ptime, a.localDateLabel || "", tzAbbr(a.iana, i),
@@ -613,7 +618,7 @@ export default function App() {
         <div className="top">
           <div className="brand">
             <div className="mark">+</div>
-            <div><h1>TC Scheduler</h1><div className="sub">Teleconsultation scheduling · IST board</div></div>
+            <div><h1>Teleconsultation Scheduler</h1><div className="sub">Teleconsultation scheduling · IST board</div></div>
           </div>
           <div className="clock">
             {autoClock ? (
@@ -635,7 +640,7 @@ export default function App() {
           <button className={"vtab" + (view === "finder" ? " on" : "")} onClick={() => setView("finder")}>🔍 Slot Finder</button>
         </div>
 
-        <div className="connected">Demo mode · all data in this tool is fictional sample data, stored only in this browser.</div>
+        <div className="connected">Demo mode · all data in this tool is fictional sample data, stored only in this browser. &nbsp;·&nbsp; Destination clinic: <select value={clinicZ} onChange={e => setClinicZ(e.target.value)} style={{ marginLeft: 4 }}>{DESTS.map(([l, z]) => <option key={z} value={z}>{l}</option>)}</select></div>
 
         {view === "board" && <div className="wrap">
           {/* LEFT */}
@@ -737,7 +742,7 @@ export default function App() {
                     <div key={a.id} className={`row r-${cls} ${hardClash.has(a.id) ? "clash" : ""}`}>
                       <div className="tcol">
                         <div className={`tb tb-${cls}`}>{istClock(inst)}{!sameDay && <div className="tbsub">{istDay(inst)}</div>}</div>
-                        <div className="trtmini">🇹🇷 {trtClock(inst)}{trtKey(inst) !== istKey(inst) && <span> {trtDay(inst)}</span>}</div>
+                        <div className="trtmini">🏥 {clinicClock(inst)}{clinicKey(inst) !== istKey(inst) && <span> {clinicDay(inst)}</span>}</div>
                       </div>
                       <div className="who">
                         <div className="nm">{a.name}
@@ -774,7 +779,7 @@ export default function App() {
                           return (
                             <div className="closerwrap">
                               <select className="agsel" value={isCustom ? "__custom__" : (a.closer || "")} onChange={e => chooseCloser(a.id, e.target.value)}>
-                                <option value="">— TC owner —</option>
+                                <option value="">— owner —</option>
                                 {CLOSERS.map(x => <option key={x}>{x}</option>)}
                                 <option value="__custom__">Custom…</option>
                               </select>
@@ -844,7 +849,7 @@ export default function App() {
                 {analytics.dates.map(d => <option key={d.key} value={d.key}>{d.label}</option>)}
               </select>
             </div>
-            <div className="afield"><label>Lead Owner</label>
+            <div className="afield"><label>Booked by</label>
               <select value={aOwner} onChange={e => setAOwner(e.target.value)}>
                 <option value="all">All owners</option>
                 {AGENTS.map(x => <option key={x}>{x}</option>)}
@@ -871,9 +876,9 @@ export default function App() {
           </div>
 
           <div className="acard">
-            <div className="acard-h">TCs by Lead Owner{aDate !== "all" ? ` · ${(analytics.dates.find(d => d.key === aDate) || {}).label || ""}` : " · all dates"}</div>
+            <div className="acard-h">Calls by booking agent{aDate !== "all" ? ` · ${(analytics.dates.find(d => d.key === aDate) || {}).label || ""}` : " · all dates"}</div>
             <table className="atable">
-              <thead><tr><th>Lead Owner</th><th>Aligned</th><th>Happened</th><th>Realigned</th><th>No-show</th><th>Not marked</th></tr></thead>
+              <thead><tr><th>Booked by</th><th>Aligned</th><th>Happened</th><th>Realigned</th><th>No-show</th><th>Not marked</th></tr></thead>
               <tbody>
                 {analytics.rows.length === 0 && <tr><td colSpan="6" className="aempty">No calls for this filter.</td></tr>}
                 {analytics.rows.map(r => (
@@ -923,7 +928,7 @@ export default function App() {
           </div>
 
           <div className="acard">
-            <div className="acard-h">Day grid · 30-minute slots · IST (Istanbul time below) — click a free slot to book it</div>
+            <div className="acard-h">Day grid · 30-minute slots · IST (clinic time below) — click a free slot to book it</div>
             <div className="calgrid">
               {calendar.cols.map((col, ci) => (
                 <div className="calcol" key={ci}>
@@ -937,7 +942,7 @@ export default function App() {
                       <div key={idx} className={"slot " + cls} onClick={() => n === 0 && pickSlot(idx)} title={n === 0 ? "Click to book this slot" : ""}>
                         <div className="sltime">
                           <span className="slist">{istClock(inst)}</span>
-                          <span className="sltrt">{trtClock(inst)} TRT</span>
+                          <span className="sltrt">{clinicClock(inst)}</span>
                         </div>
                         <div className="slbody">
                           {n === 0 && past === 0 && <span className="slfree">free</span>}

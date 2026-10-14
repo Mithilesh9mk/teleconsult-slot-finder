@@ -12,6 +12,22 @@ Time zones come from the IANA tz database, so daylight-saving shifts are handled
 
 > **Data notice.** This repository contains no company, patient or staff data. The working-hour windows are stated assumptions. All names, times and links in the web tool are fictional sample data generated at load time.
 
+## Preview
+
+GitHub shows the code but does not run the app. These screenshots are from the sample-data build.
+
+**Slot Finder**
+
+![Slot Finder](docs/slot-finder.png)
+
+**Board** (fictional sample patients)
+
+![Board](docs/board.png)
+
+**Calendar**
+
+![Calendar](docs/calendar.png)
+
 ## What is in here
 
 | Folder | Contents |

@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef } from "react";
 
 /* ====================== TIMEZONE ENGINE (IANA / DST-safe) ====================== */
-// Picker options — labelled by city, grouped by region. The zone is the IANA id,
+// Picker options, labelled by city, grouped by region. The zone is the IANA id,
 // which uses the same tz database WorldTimeBuddy runs on (incl. daylight saving).
 const TZ_GROUPS = [
   ["United Kingdom & Europe", [
@@ -162,15 +162,15 @@ function buildMessage(name, localDateLabel, localTime12, tzAbbrStr, inst) {
 `Hey ${first}! 🎉 You're all set.
 Your teleconsultation is confirmed. Here are the details.
 
-Teleconsultation Confirmation – ${name}
+Teleconsultation Confirmation - ${name}
 📅 Date: ${localDateLabel}
 ⏰ Time: ${localTime12} (${tzAbbrStr})
 🔗 Meeting Link: ${"{LINK}"}
 
 Please join a few minutes early and bring any questions. See you there!
 
-———
-🕒 IST (internal — delete this line before sending to patient): ${istClock(inst)}, ${istDay(inst)}
+---
+🕒 IST (internal, delete this line before sending to patient): ${istClock(inst)}, ${istDay(inst)}
 🏥 ${clinicLabel()} clinic time (for the doctor): ${clinicClock(inst)}, ${clinicDay(inst)}`
   );
 }
@@ -429,10 +429,10 @@ export default function App() {
       for (let i = 0; i < g.length; i++) for (let j = i + 1; j < g.length; j++)
         if ((g[i].agent && g[i].agent === g[j].agent) || (g[i].link && g[i].link === g[j].link)) isHard = true;
       const time = istClock(new Date(g[0].istInstant));
-      if (isHard) { g.forEach(x => hard.add(x.id)); al.push(["err", `🚨 Real clash at ${time} IST — ${g.map(x => x.name).join(" & ")} share an agent or link. Reschedule one.`]); }
-      else { g.forEach(x => soft.add(x.id)); al.push(["warn", `⚠ Two calls at ${time} IST — ${g.map(x => x.name).join(" & ")} (different agents/links, so OK if you have the capacity).`]); }
+      if (isHard) { g.forEach(x => hard.add(x.id)); al.push(["err", `🚨 Real clash at ${time} IST, ${g.map(x => x.name).join(" & ")} share an agent or link. Reschedule one.`]); }
+      else { g.forEach(x => soft.add(x.id)); al.push(["warn", `⚠ Two calls at ${time} IST, ${g.map(x => x.name).join(" & ")} (different agents/links, so OK if you have the capacity).`]); }
     });
-    sorted.filter(a => a.claimedMismatch).forEach(a => al.push(["warn", `⚠ ${a.name}: booking IST was wrong (said ${a.claimedMismatch.claimed}). Correct is ${a.claimedMismatch.real} — tell the agent.`]));
+    sorted.filter(a => a.claimedMismatch).forEach(a => al.push(["warn", `⚠ ${a.name}: booking IST was wrong (said ${a.claimedMismatch.claimed}). Correct is ${a.claimedMismatch.real}, tell the agent.`]));
     return { alerts: al, hardClash: hard, softOverlap: soft };
   }, [sorted]);
 
@@ -514,18 +514,18 @@ export default function App() {
     const inst = slotInstant(calendar.day, idx);
     setTargetSlot({ iso: inst.toISOString(), label: `${istClock(inst)} IST, ${istDay(inst)}` });
     setView("board"); setMode("form");
-    showToast(`Targeting ${istClock(inst)} IST — set the patient's timezone & time`);
+    showToast(`Targeting ${istClock(inst)} IST, set the patient's timezone & time`);
   }
 
   /* ---- exports ---- */
   const setMF = (k, v) => setModal(m => ({ ...m, [k]: v }));
   function buildBoardText() {
-    let txt = `📅 *Consultation Board — ${istDay(nowDate)}*\n⏰ As of ${istClock(nowDate)} IST\n━━━━━━━━━━━━━━━━\n`;
+    let txt = `📅 *Consultation Board, ${istDay(nowDate)}*\n⏰ As of ${istClock(nowDate)} IST\n━━━━━━━━━━━━━━━━\n`;
     for (const [key, title] of SEGMENTS) {
       const items = byStatus[key]; if (!items.length) continue;
       txt += `\n${title}\n`;
       items.forEach(a => { const i = new Date(a.istInstant);
-        txt += `• *${a.name}* — ${istClock(i)} IST${istKey(i) === istKey(nowDate) ? "" : " (" + istDay(i) + ")"}  [${a.localTime}]${a.agent ? " · " + a.agent : ""}${a.claimedMismatch ? " ⚠IST-fixed" : ""}\n`; });
+        txt += `• *${a.name}*, ${istClock(i)} IST${istKey(i) === istKey(nowDate) ? "" : " (" + istDay(i) + ")"}  [${a.localTime}]${a.agent ? " · " + a.agent : ""}${a.claimedMismatch ? " ⚠IST-fixed" : ""}\n`; });
     }
     return txt;
   }
@@ -680,7 +680,7 @@ export default function App() {
                   <input className="fi" value={fLink} onChange={e => setFLink(e.target.value)} placeholder="https://meet.google.com/..." />
                   <label className="fl">Booked by</label>
                   <select className="fi" value={fAgentCustom ? "__custom__" : fAgent} onChange={e => { const v = e.target.value; if (v === "__custom__") { setFAgentCustom(true); setFAgent(""); } else { setFAgentCustom(false); setFAgent(v); } }}>
-                    <option value="">— select agent —</option>
+                    <option value="">Select agent</option>
                     {AGENTS.map(a => <option key={a}>{a}</option>)}
                     <option value="__custom__">Custom…</option>
                   </select>
@@ -691,7 +691,7 @@ export default function App() {
                       🎯 Targeting <b>{targetSlot.label}</b>
                       <button className="mini" onClick={() => setTargetSlot(null)}>clear</button>
                       {formInst && (Math.abs(+formInst - +new Date(targetSlot.iso)) >= 30 * 60000
-                        ? <div className="tgtwarn">⚠ This lands at {istClock(formInst)} IST, {istDay(formInst)} — not the slot you picked.</div>
+                        ? <div className="tgtwarn">⚠ This lands at {istClock(formInst)} IST, {istDay(formInst)}, not the slot you picked.</div>
                         : <div className="tgtok">✓ Lands in the targeted slot.</div>)}
                     </div>
                   )}
@@ -717,7 +717,7 @@ export default function App() {
                 <div className="bd">
                   <textarea value={raw} onChange={e => setRaw(e.target.value)} placeholder={"Paste a confirmation message…\n\nTele-Consultation Confirmation – Sample Patient\n📅 Date: 18 Jun 2026\n⏰ Time: 6:00 PM (Pacific Time)\n🔗 Meeting Link: https://meet.google.com/..."} />
                   <button className="primary" onClick={addFromPaste}>＋ Add to board</button>
-                  <div className="hint">IST is always recomputed from the local time — a wrong IST in the message gets flagged and corrected automatically.</div>
+                  <div className="hint">IST is always recomputed from the local time, a wrong IST in the message gets flagged and corrected automatically.</div>
                 </div>
               </div>
             )}
@@ -766,7 +766,7 @@ export default function App() {
                           return (
                             <div className="closerwrap">
                               <select className="agsel" value={isCustomA ? "__custom__" : (a.agent || "")} onChange={e => chooseAgent(a.id, e.target.value)}>
-                                <option value="">— booked by —</option>
+                                <option value="">Booked by</option>
                                 {AGENTS.map(x => <option key={x}>{x}</option>)}
                                 <option value="__custom__">Custom…</option>
                               </select>
@@ -779,7 +779,7 @@ export default function App() {
                           return (
                             <div className="closerwrap">
                               <select className="agsel" value={isCustom ? "__custom__" : (a.closer || "")} onChange={e => chooseCloser(a.id, e.target.value)}>
-                                <option value="">— owner —</option>
+                                <option value="">Owner</option>
                                 {CLOSERS.map(x => <option key={x}>{x}</option>)}
                                 <option value="__custom__">Custom…</option>
                               </select>
@@ -788,7 +788,7 @@ export default function App() {
                           );
                         })()}
                         <select className="agsel outsel" value={a.outcome || ""} onChange={e => setRowOutcome(a.id, e.target.value)}>
-                          <option value="">— status —</option>
+                          <option value="">Status</option>
                           {OUTCOMES.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
                         </select>
                         <div className="acts">
@@ -928,7 +928,7 @@ export default function App() {
           </div>
 
           <div className="acard">
-            <div className="acard-h">Day grid · 30-minute slots · IST (clinic time below) — click a free slot to book it</div>
+            <div className="acard-h">Day grid · 30-minute slots · IST (clinic time below), click a free slot to book it</div>
             <div className="calgrid">
               {calendar.cols.map((col, ci) => (
                 <div className="calcol" key={ci}>
@@ -1076,7 +1076,7 @@ export default function App() {
             <div className="mod" onClick={e => e.stopPropagation()}>
               {(modal.type === "edit" || modal.type === "rebook") ? (
                 <>
-                  <div className="modh">{modal.type === "rebook" ? "Rebook call — set the new date & time" : "Edit call"}</div>
+                  <div className="modh">{modal.type === "rebook" ? "Rebook call, set the new date & time" : "Edit call"}</div>
                   <label className="fl">Patient name</label>
                   <input className="fi" value={modal.name} onChange={e => setMF("name", e.target.value)} />
                   <label className="fl">Patient date</label>
@@ -1101,7 +1101,7 @@ export default function App() {
                   <input className="fi" value={modal.link} onChange={e => setMF("link", e.target.value)} />
                   <label className="fl">Booked by</label>
                   <select className="fi" value={(mAgentCustom || (modal.agent && !AGENTS.includes(modal.agent))) ? "__custom__" : modal.agent} onChange={e => { const v = e.target.value; if (v === "__custom__") { setMAgentCustom(true); setMF("agent", ""); } else { setMAgentCustom(false); setMF("agent", v); } }}>
-                    <option value="">— select agent —</option>{AGENTS.map(a => <option key={a}>{a}</option>)}
+                    <option value="">Select agent</option>{AGENTS.map(a => <option key={a}>{a}</option>)}
                     <option value="__custom__">Custom…</option>
                   </select>
                   {(mAgentCustom || (modal.agent && !AGENTS.includes(modal.agent))) && <input className="fi" placeholder="Type agent name" value={modal.agent} onChange={e => setMF("agent", e.target.value)} />}
@@ -1109,7 +1109,7 @@ export default function App() {
                 </>
               ) : (
                 <>
-                  <div className="modh">{modal.type === "copy" ? "Copy for WhatsApp" : modal.type === "export" ? "Export — copy this and keep it safe" : "Import — paste board JSON"}</div>
+                  <div className="modh">{modal.type === "copy" ? "Copy for WhatsApp" : modal.type === "export" ? "Export, copy this and keep it safe" : "Import, paste board JSON"}</div>
                   <textarea id="modalTa" className="modta" readOnly={modal.type !== "import"} value={modal.text} placeholder={modal.type === "import" ? "Paste the exported JSON here…" : ""} onChange={e => setMF("text", e.target.value)} />
                   <div className="modf">
                     <button className="ghost" onClick={() => setModal(null)}>Close</button>

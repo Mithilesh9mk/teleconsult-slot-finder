@@ -14,6 +14,8 @@ Time zones come from the IANA tz database, so daylight-saving shifts are handled
 
 ## Preview
 
+**Live app:** https://mithilesh9mk.github.io/teleconsult-slot-finder/
+
 GitHub shows the code but does not run the app. These screenshots are from the sample-data build.
 
 **Slot Finder**

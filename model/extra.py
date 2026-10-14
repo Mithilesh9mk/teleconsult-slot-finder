@@ -42,4 +42,4 @@ for r,dn in pairs:
     ax.step(dd,y,where="mid",label=f"{r} → {dn}")
 ax.set_ylabel("Feasible hours/day"); ax.set_xlabel("2026"); ax.legend(fontsize=7); ax.grid(alpha=.3)
 ax.set_title("Seasonal movement of the feasible window (Standard hours)",fontsize=10)
-fig.savefig(os.path.join(OUT, "fig_seasonal.png"),dpi=200,bbox_inches="tight")
+fig.savefig(os.path.join(OUT, "fig_seasonal.png"),dpi=400,bbox_inches="tight")

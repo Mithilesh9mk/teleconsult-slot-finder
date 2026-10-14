@@ -1,0 +1,85 @@
+scenario,region,destination,mean_hours,min_hours,max_hours,zero_days,seasonal_swing,tier
+Standard,UK,Turkey,7.575342465753424,7.0,8.0,0,1.0,Green
+Standard,UK,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,UK,Thailand,3.5753424657534247,3.0,4.0,0,1.0,Amber
+Standard,UK,South Korea,1.5753424657534247,1.0,2.0,0,1.0,Amber
+Standard,Ireland,Turkey,7.575342465753424,7.0,8.0,0,1.0,Green
+Standard,Ireland,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,Ireland,Thailand,3.5753424657534247,3.0,4.0,0,1.0,Amber
+Standard,Ireland,South Korea,1.5753424657534247,1.0,2.0,0,1.0,Amber
+Standard,Europe Central,Turkey,8.575342465753424,8.0,9.0,0,1.0,Green
+Standard,Europe Central,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,Europe Central,Thailand,4.575342465753424,4.0,5.0,0,1.0,Green
+Standard,Europe Central,South Korea,2.5753424657534247,2.0,3.0,0,1.0,Amber
+Standard,Europe Eastern,Turkey,9.0,9.0,9.0,0,0.0,Green
+Standard,Europe Eastern,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,Europe Eastern,Thailand,5.575342465753424,5.0,6.0,0,1.0,Green
+Standard,Europe Eastern,South Korea,3.5753424657534247,3.0,4.0,0,1.0,Amber
+Standard,US Eastern,Turkey,2.652054794520548,2.0,3.0,0,1.0,Amber
+Standard,US Eastern,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,US Eastern,Thailand,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Eastern,South Korea,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Central,Turkey,1.652054794520548,1.0,2.0,0,1.0,Amber
+Standard,US Central,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,US Central,Thailand,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Central,South Korea,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Mountain,Turkey,0.6520547945205479,0.0,1.0,127,1.0,Red (<1h)
+Standard,US Mountain,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,US Mountain,Thailand,0.173972602739726,0.0,0.5,238,0.5,Red (<1h)
+Standard,US Mountain,South Korea,0.173972602739726,0.0,0.5,238,0.5,Red (<1h)
+Standard,US Arizona,Turkey,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Arizona,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,US Arizona,Thailand,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,US Arizona,South Korea,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,US Pacific,Turkey,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Pacific,Mexico,0.3260273972602739,0.0,0.5,127,0.5,Red (<1h)
+Standard,US Pacific,Thailand,0.8479452054794521,0.5,1.5,0,1.0,Red (<1h)
+Standard,US Pacific,South Korea,0.8479452054794521,0.5,1.5,0,1.0,Red (<1h)
+Standard,US Alaska,Turkey,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Alaska,Mexico,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Alaska,Thailand,1.847945205479452,1.5,2.5,0,1.0,Amber
+Standard,US Alaska,South Korea,1.847945205479452,1.5,2.5,0,1.0,Amber
+Standard,US Hawaii,Turkey,1.0,1.0,1.0,0,0.0,Amber
+Standard,US Hawaii,Mexico,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,US Hawaii,Thailand,3.5,3.5,3.5,0,0.0,Amber
+Standard,US Hawaii,South Korea,3.5,3.5,3.5,0,0.0,Amber
+Standard,UAE / Gulf,Turkey,9.0,9.0,9.0,0,0.0,Green
+Standard,UAE / Gulf,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,UAE / Gulf,Thailand,7.0,7.0,7.0,0,0.0,Green
+Standard,UAE / Gulf,South Korea,5.0,5.0,5.0,0,0.0,Green
+Standard,Saudi Arabia,Turkey,9.0,9.0,9.0,0,0.0,Green
+Standard,Saudi Arabia,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,Saudi Arabia,Thailand,6.0,6.0,6.0,0,0.0,Green
+Standard,Saudi Arabia,South Korea,4.0,4.0,4.0,0,0.0,Green
+Standard,Qatar,Turkey,9.0,9.0,9.0,0,0.0,Green
+Standard,Qatar,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,Qatar,Thailand,6.0,6.0,6.0,0,0.0,Green
+Standard,Qatar,South Korea,4.0,4.0,4.0,0,0.0,Green
+Standard,Israel,Turkey,9.0,9.0,9.0,0,0.0,Green
+Standard,Israel,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,Israel,Thailand,5.580821917808219,5.0,6.0,0,1.0,Green
+Standard,Israel,South Korea,3.580821917808219,3.0,4.0,0,1.0,Amber
+Standard,Australia WA,Turkey,7.0,7.0,7.0,0,0.0,Green
+Standard,Australia WA,Mexico,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,Australia WA,Thailand,7.5,7.5,7.5,0,0.0,Green
+Standard,Australia WA,South Korea,5.5,5.5,5.5,0,0.0,Green
+Standard,Australia QLD,Turkey,5.0,5.0,5.0,0,0.0,Green
+Standard,Australia QLD,Mexico,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,Australia QLD,Thailand,7.5,7.5,7.5,0,0.0,Green
+Standard,Australia QLD,South Korea,5.5,5.5,5.5,0,0.0,Green
+Standard,Australia NSW/VIC,Turkey,4.498630136986302,4.0,5.0,0,1.0,Green
+Standard,Australia NSW/VIC,Mexico,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,Australia NSW/VIC,Thailand,6.998630136986302,6.5,7.5,0,1.0,Green
+Standard,Australia NSW/VIC,South Korea,5.5,5.5,5.5,0,0.0,Green
+Standard,Australia SA,Turkey,4.998630136986302,4.5,5.5,0,1.0,Green
+Standard,Australia SA,Mexico,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,Australia SA,Thailand,7.249315068493151,7.0,7.5,0,0.5,Green
+Standard,Australia SA,South Korea,5.5,5.5,5.5,0,0.0,Green
+Standard,New Zealand,Turkey,2.4794520547945207,2.0,3.0,0,1.0,Amber
+Standard,New Zealand,Mexico,0.0,0.0,0.0,365,0.0,Red (none)
+Standard,New Zealand,Thailand,4.97945205479452,4.5,5.5,0,1.0,Green
+Standard,New Zealand,South Korea,4.97945205479452,4.5,5.5,0,1.0,Green
+Standard,South Africa,Turkey,9.0,9.0,9.0,0,0.0,Green
+Standard,South Africa,Mexico,0.5,0.5,0.5,0,0.0,Red (<1h)
+Standard,South Africa,Thailand,5.0,5.0,5.0,0,0.0,Green
+Standard,South Africa,South Korea,3.0,3.0,3.0,0,0.0,Amber
